@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/Ralla/AndroidStudioProjects/Augmented-Reality-master 2/app/build/intermediates/res/merged/debug/color-v23/abc_color_highlight_material.xml",
+        "source": "/Users/Ralla/AndroidStudioProjects/Augmented-Reality-master 2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/color-v23/abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "/Users/Youngmin/Desktop/UscAR/app/build/intermediates/res/merged/debug/color-v23/abc_color_highlight_material.xml",
+        "source": "/Users/Youngmin/Desktop/UscAR/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/color-v23/abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "/Users/Youngmin/Desktop/BeyondAR_Examples/app/build/intermediates/res/merged/debug/color-v23/abc_color_highlight_material.xml",
+        "source": "/Users/Youngmin/Desktop/BeyondAR_Examples/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/color-v23/abc_color_highlight_material.xml"
+    }
+]

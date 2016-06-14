@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/Ralla/AndroidStudioProjects/Augmented-Reality-master 2/app/build/intermediates/res/merged/debug/drawable-ldpi-v4/common_ic_googleplayservices.png",
+        "source": "/Users/Ralla/AndroidStudioProjects/Augmented-Reality-master 2/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.0.0/res/drawable-ldpi-v4/common_ic_googleplayservices.png"
+    },
+    {
+        "merged": "/Users/Youngmin/Desktop/BeyondAR_Examples/app/build/intermediates/res/merged/debug/drawable-ldpi-v4/common_ic_googleplayservices.png",
+        "source": "/Users/Youngmin/Desktop/BeyondAR_Examples/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.0.0/res/drawable-ldpi-v4/common_ic_googleplayservices.png"
+    },
+    {
+        "merged": "/Users/Youngmin/Desktop/UscAR/app/build/intermediates/res/merged/debug/drawable-ldpi-v4/common_ic_googleplayservices.png",
+        "source": "/Users/Youngmin/Desktop/UscAR/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.0.0/res/drawable-ldpi-v4/common_ic_googleplayservices.png"
+    }
+]

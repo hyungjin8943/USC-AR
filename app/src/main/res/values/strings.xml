@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">UscAR</string>
+    <string name="title_activity_custom_main">CustomMainActivity</string>
+    <string name="title_activity_custom_map">CustomMapActivity</string>
+    <string name="title_activity_custom_search">CustomSearchActivity</string>
+
+</resources>

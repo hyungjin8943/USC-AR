@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- <android.support.v4.widget.SlidingPaneLayout -->
+<edu.usc.UscAR.custom.CustomSlidingPaneLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sliding_pane_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!-- Left side pane. (Slave) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:id="@+id/detail_close" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_name" />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/image_name"
+            />
+
+    </LinearLayout>
+
+    <!-- Right side pane. (Master) -->
+    <fragment
+        android:id="@+id/beyondarFragment"
+        android:name="com.beyondar.android.fragment.BeyondarFragmentSupport"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:background="@drawable/radar_bg_small">
+
+            <com.beyondar.android.plugin.radar.RadarView
+                android:id="@+id/radarView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/radar_north_small" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <!-- info -->
+            <TextView
+                android:id="@+id/textValues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="2dip"
+                android:layout_marginTop="2dip"
+                android:background="#FF000000"
+                android:text="Distance"
+                android:textColor="#FFFFFFFF" />
+
+            <!-- GPS info -->
+            <TextView
+                android:id="@+id/GPStextValues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textValues"
+                android:layout_marginLeft="2dip"
+                android:layout_marginTop="2dip"
+                android:layout_alignParentRight="true"
+                android:background="#FF000000"
+                android:text="GPS"
+                android:textColor="#FFFFFFFF" />
+
+
+            <!-- Radar -->
+            <TextView
+                android:id="@+id/textMaxDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" />
+
+            <SeekBar
+                android:id="@+id/seekBarMaxDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="2dip"
+                android:layout_toRightOf="@id/textMaxDistance" />
+
+            <!-- Render -->
+            <TextView
+                android:id="@+id/textBarArViewDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/seekBarMaxDistance" />
+
+            <SeekBar
+                android:id="@+id/seekBarArViewDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/seekBarMaxDistance"
+                android:layout_margin="2dip"
+                android:layout_toRightOf="@id/textBarArViewDistance" />
+
+            <!-- Image Increase Decrease -->
+            <TextView
+                android:id="@+id/textBarMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/seekBarArViewDistance"/>
+
+            <SeekBar
+                android:id="@+id/seekBarMin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/seekBarArViewDistance"
+                android:layout_margin="2dip"
+                android:layout_toRightOf="@id/textBarMin" />
+
+            <!-- Map Button -->
+            <Button
+                android:id="@+id/showMapButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/seekBarMin"
+                android:layout_alignParentRight="true"
+                android:text="Show map" />
+
+            <!-- Map Button -->
+            <Button
+                android:id="@+id/navigationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/showMapButton"
+                android:layout_alignParentRight="true"
+                android:text="Navigation" />
+
+        </RelativeLayout>
+    </fragment>
+
+</edu.usc.UscAR.custom.CustomSlidingPaneLayout>
