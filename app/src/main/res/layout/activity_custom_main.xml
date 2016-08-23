@@ -5,8 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/sliding_pane_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent" >
 
     <!-- Left side pane. (Slave) -->
     <LinearLayout
@@ -21,16 +20,48 @@
             android:text="Close"
             android:id="@+id/detail_close" />
 
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:id="@+id/detail_image"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_code" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/detail_name" />
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:id="@+id/image_name"
-            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_description" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:id="@+id/detail_homepage" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_distance" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <VideoView
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:id="@+id/detail_video" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -59,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom">
+
 
             <!-- info -->
             <TextView
@@ -102,7 +134,7 @@
                 android:layout_margin="2dip"
                 android:layout_toRightOf="@id/textMaxDistance" />
 
-            <!-- Render -->
+            <!-- Render
             <TextView
                 android:id="@+id/textBarArViewDistance"
                 android:layout_width="wrap_content"
@@ -116,19 +148,20 @@
                 android:layout_above="@id/seekBarMaxDistance"
                 android:layout_margin="2dip"
                 android:layout_toRightOf="@id/textBarArViewDistance" />
+            -->
 
             <!-- Image Increase Decrease -->
             <TextView
                 android:id="@+id/textBarMin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/seekBarArViewDistance"/>
+                android:layout_above="@id/seekBarMaxDistance"/>
 
             <SeekBar
                 android:id="@+id/seekBarMin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/seekBarArViewDistance"
+                android:layout_above="@id/seekBarMaxDistance"
                 android:layout_margin="2dip"
                 android:layout_toRightOf="@id/textBarMin" />
 
@@ -141,7 +174,7 @@
                 android:layout_alignParentRight="true"
                 android:text="Show map" />
 
-            <!-- Map Button -->
+            <!-- Navigation Button -->
             <Button
                 android:id="@+id/navigationButton"
                 android:layout_width="wrap_content"
@@ -150,6 +183,54 @@
                 android:layout_alignParentRight="true"
                 android:text="Navigation" />
 
+
+
+
+            <!-- Audio Controller -->
+            <Button
+                android:id="@+id/play_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/showMapButton"
+                android:text="Play" />
+            <Button
+                android:id="@+id/stop_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/showMapButton"
+                android:layout_toRightOf="@id/play_button"
+                android:text="Stop" />
+            <Button
+                android:id="@+id/pause_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/showMapButton"
+                android:layout_toRightOf="@id/stop_button"
+                android:text="Pause" />
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/showMapButton"
+                android:layout_toRightOf="@id/pause_button"/>
+            <SeekBar
+                android:id="@+id/audio_seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/play_button"
+                android:layout_margin="2dip" />
+            <VideoView
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:id="@+id/camera_video"
+                android:layout_above="@+id/audio_seekbar"
+                android:layout_margin="2dp"/>
+            <Button
+                android:id="@+id/closeVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/showMapButton"
+                android:text="closeVideo" />
         </RelativeLayout>
     </fragment>
 
