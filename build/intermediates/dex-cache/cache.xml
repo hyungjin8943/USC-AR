@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/Users/Ralla/.gradle/caches/modules-2/files-2.1/com.cocoahero.android/geojson/1.0.1/5ac9c72666b11d5817e8c3c1145e0b020725e7de/geojson-1.0.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5ac9c72666b11d5817e8c3c1145e0b020725e7de">
+        <dex dex="/Users/Ralla/AndroidStudioProjects/Augmented-Reality-master 2/app/build/intermediates/pre-dexed/debug/geojson-1.0.1_c984af9d917709a67e5ed65bf6e66757c503ea4e.jar" />
+    </item>
+
+</items>

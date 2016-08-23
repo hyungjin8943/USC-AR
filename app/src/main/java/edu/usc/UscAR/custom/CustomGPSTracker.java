@@ -12,8 +12,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.beyondar.android.fragment.BeyondarFragmentSupport;
+import com.beyondar.android.util.math.Distance;
+import com.beyondar.example.R;
 
 /**
  * Created by Youngmin on 2016. 5. 29..
@@ -22,7 +25,10 @@ public class CustomGPSTracker extends Service implements LocationListener {
 
     private BeyondarFragmentSupport mBeyondarFragment;
 
-    private final Context mContext;
+    private Context mContext;
+
+    public static Double mlatitude = 0d;
+    public static Double mlongitude = 0d;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -39,7 +45,7 @@ public class CustomGPSTracker extends Service implements LocationListener {
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     // The minimum time between updates in milliseconds
     // private static final long MIN_TIME_BW_UPDATES = 1000; // 1 second
-    private static final long MIN_TIME_BW_UPDATES = 0;
+    private static final long MIN_TIME_BW_UPDATES = 1000;
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
@@ -107,16 +113,18 @@ public class CustomGPSTracker extends Service implements LocationListener {
 
     // Stop using GPS listener
     // Calling this function will stop using GPS in your app
-    public void stopUsingGPS(){
-        if(locationManager != null){
+    public void stopUsingGPS() {
+
+        if (locationManager != null) {
+            // Toast.makeText(mContext, "GPS must be stopped!!!", Toast.LENGTH_LONG).show();
             locationManager.removeUpdates(CustomGPSTracker.this);
+            locationManager = null;
         }
     }
 
-
     // Function to get latitude
-    public double getLatitude(){
-        if(location != null){
+    public double getLatitude() {
+        if (location != null) {
             latitude = location.getLatitude();
         }
         // return latitude
@@ -124,19 +132,19 @@ public class CustomGPSTracker extends Service implements LocationListener {
     }
 
     // Function to get longitude
-    public double getLongitude(){
-        if(location != null){
+    public double getLongitude() {
+        if (location != null) {
             longitude = location.getLongitude();
         }
         // return longitude
         return longitude;
     }
 
-    public double getSpeed(){
+    public double getSpeed() {
         return speed;
     }
 
-    public double getDirection(){
+    public double getDirection() {
         return direction;
     }
 
@@ -148,7 +156,7 @@ public class CustomGPSTracker extends Service implements LocationListener {
 
     // Function to show settings alert dialog
     // On pressing Settings button will launch Settings Options
-    public void showSettingsAlert(){
+    public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
         // Setting Dialog Title
         alertDialog.setTitle("GPS is settings");
@@ -156,7 +164,7 @@ public class CustomGPSTracker extends Service implements LocationListener {
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
@@ -170,34 +178,78 @@ public class CustomGPSTracker extends Service implements LocationListener {
         // Showing Alert Message
         alertDialog.show();
     }
+
     @Override
     public void onLocationChanged(Location location) {
 
-        if(location != null) {
+        if (location != null) {
             speed = location.getSpeed();
             direction = location.getBearing();
         }
         this.location = location;
 
-        // Log.e("lat!!", Double.toString(latitude));
+        CustomHelperClass.latitude = getLatitude();
+        CustomHelperClass.longitude = getLongitude();
+        CustomCameraActivity.updateTextValues();
+
+        Toast.makeText(mContext, "GPS Tracker latitude: " + CustomHelperClass.latitude, Toast.LENGTH_LONG).show();
+        Log.e("GPS Tracker latitude", Double.toString(CustomHelperClass.latitude));
+
+        // CustomHelperClass.sharedWorld.setGeoPosition(34.0217, -118.284);
+        CustomHelperClass.sharedWorld.setGeoPosition(CustomHelperClass.latitude, CustomHelperClass.longitude);
+
+
+        USCMapJSONLocal uscMapLocal = new USCMapJSONLocal();
+        String jsonStr = uscMapLocal.readFromFile(mContext);
+        uscMapLocal.jsonConverter(jsonStr);
+
+        CustomHelperClass.sharedWorld.clearWorld();
+        CustomHelperClass.sharedWorld.setDefaultImage(R.drawable.beyondar_default_unknow_icon);
+
+        for(int i=0; i<uscMapLocal.buildingArray.size(); i++) {
+
+            CustomGeoObject geoObject = new CustomGeoObject(i);
+            geoObject = uscMapLocal.buildingArray.get(i);
+
+            // Log.e("distance2", Double.toString(Distance.calculateDistanceMeters(CustomHelperClass.longitude, CustomHelperClass.latitude, geoObject.getLongitude(), geoObject.getLatitude())));
+            // Log.e("distance2", Double.toString(Distance.calculateDistanceMeters(-118.284, 34.0217, geoObject.getLongitude(), geoObject.getLatitude())));
+
+            // double distance = Distance.calculateDistanceMeters(-118.284, 34.0217, geoObject.getLongitude(), geoObject.getLatitude());
+            double distance = Distance.calculateDistanceMeters(CustomHelperClass.longitude, CustomHelperClass.latitude, geoObject.getLongitude(), geoObject.getLatitude());
+
+            if(distance < 50) {
+                String image = "viewimage_" + geoObject.getmId();
+                int imageResource = mContext.getResources().getIdentifier(image, "drawable", mContext.getPackageName());
+
+                geoObject.setGeoPosition(geoObject.getLatitude(), geoObject.getLongitude());
+                geoObject.setImageResource(imageResource); // geoObject.setImageResource(R.drawable.creature_1);
+                geoObject.setName(geoObject.getmName()); // Beyondar Object Id
+                CustomHelperClass.sharedWorld.addBeyondarObject(geoObject);
+            }
+        }
+
+
+
     }
+
     @Override
     public void onProviderDisabled(String provider) {
 
     }
+
     @Override
     public void onProviderEnabled(String provider) {
 
     }
+
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
+
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
     }
-
-
 }
 

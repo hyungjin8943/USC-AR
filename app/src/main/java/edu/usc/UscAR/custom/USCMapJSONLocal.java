@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class USCMapJSONLocal  {
 
-    public static ArrayList<PointOfInterest> buildingArray = new ArrayList<PointOfInterest>();
+    public static ArrayList<CustomGeoObject> buildingArray = new ArrayList<CustomGeoObject>();
 
     public String readFromFile(Context context) {
 
@@ -68,7 +68,7 @@ public class USCMapJSONLocal  {
             for(int i=0; i<jsonArr.length(); i++) {
 
                 JSONObject jsonObj = jsonArr.getJSONObject(i);
-                PointOfInterest poi = new PointOfInterest();
+                CustomGeoObject poi = new CustomGeoObject();
 
                 // Log.e("jsonArr", jsonObj.getString("code")); // short name
                 jsonObj.getString("id"); // id number
@@ -79,11 +79,9 @@ public class USCMapJSONLocal  {
                 jsonObj.getString("url");
                 jsonObj.getString("address");
 
-                poi.setId(jsonObj.getString("id"));
+                poi.setmId(jsonObj.getString("id"));
                 poi.setCode(jsonObj.getString("code"));
-
                 poi.setmName(jsonObj.getString("name"));
-
                 poi.setLatitude(jsonObj.getDouble("latitude"));
                 poi.setLongitude(jsonObj.getDouble("longitude"));
                 poi.setPhoto(jsonObj.getString("photo"));

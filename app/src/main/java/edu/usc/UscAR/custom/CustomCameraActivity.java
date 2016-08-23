@@ -43,6 +43,8 @@ import com.beyondar.android.world.BeyondarObjectList;
 import com.beyondar.android.world.GeoObject;
 import com.beyondar.android.world.World;
 import com.beyondar.example.R;
+import com.cocoahero.android.geojson.GeoJSON;
+import com.cocoahero.android.geojson.GeoJSONObject;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -446,6 +448,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle("Show Information or Listen Narration");
+
 
 
         builder.setPositiveButton("Info", new DialogInterface.OnClickListener() {
