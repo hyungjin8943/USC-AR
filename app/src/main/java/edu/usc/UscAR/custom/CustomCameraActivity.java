@@ -43,6 +43,8 @@ import com.beyondar.android.world.BeyondarObjectList;
 import com.beyondar.android.world.GeoObject;
 import com.beyondar.android.world.World;
 import com.beyondar.example.R;
+import com.cocoahero.android.geojson.Feature;
+import com.cocoahero.android.geojson.FeatureCollection;
 import com.cocoahero.android.geojson.GeoJSON;
 import com.cocoahero.android.geojson.GeoJSONObject;
 import com.google.android.gms.common.ConnectionResult;
@@ -54,6 +56,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,6 +66,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import edu.usc.UscAR.CustomWorldHelper;
@@ -448,7 +452,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle("Show Information or Listen Narration");
-
+        final CustomGeoObject customGeoObject = (CustomGeoObject) beyondarObjects.get(0);
 
 
         builder.setPositiveButton("Info", new DialogInterface.OnClickListener() {
@@ -582,15 +586,9 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                     mediaPlayer.release();
                     durationHandler.removeCallbacks(updateSeekBarTime);
                 }
-                mVideo.setVideoPath("http://www.ebookfrenzy.com/android_book/movie.mp4");
-                mediaController = new MediaController(CustomCameraActivity.this);
-                mediaController.setAnchorView(mVideo);
-                mVideo.setMediaController(mediaController);
-                mCloseVideo.setVisibility(View.VISIBLE);
+                FetchVideoTask fetchVideoTask = new FetchVideoTask();
+                fetchVideoTask.execute(customGeoObject.getLatitude(),customGeoObject.getLongitude());
 
-                mVideo.setVisibility(View.VISIBLE); // visible Videoview
-
-                mVideo.start();
             }
 
         });
@@ -752,7 +750,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
         this.mBeyondarFragment.onPause();
         CustomHelperClass.Pause();
-        System.gc();
+        //System.gc();
     }
 
 
@@ -827,14 +825,29 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
 
     }
-    private class FetchVideoTask extends AsyncTask<String, Void, String> {
+
+    private class FetchVideoTask extends AsyncTask<Double, Void,  List<Feature>> {
         @Override
-        protected String doInBackground(String... params) {
+        protected  List<Feature> doInBackground(Double... params) {
+
             if(params.length ==0)
                 return null;
             Log.v("fetch",params[0] + ","+ params[1]);
+
+            System.out.println(Double.toString(params[0]-Distance.fastConversionMetersToGeoPoints(4.00)));
+            System.out.println(Double.toString(params[1]-Distance.fastConversionMetersToGeoPoints(4.00)));
+            System.out.println(Double.toString(Distance.fastConversionMetersToGeoPoints(1.00)));
             try {
-                URL url = new URL("http://mediaq.usc.edu/MediaQ_MVC_V3/api/geoq/rectangle_query?swlat=34.019972&swlng=-118.291588&nelat=34.021111&nelng=-118.287125&X-API-KEY=8b51UFM2SlBltx3s6864eUO1zSoefeK5");
+                StringBuilder urlAPI = new StringBuilder();
+                urlAPI.append("http://mediaq.usc.edu/MediaQ_MVC_V3/api/geoq/rectangle_query?swlat=");
+                urlAPI.append(Double.toString(params[0]-Distance.fastConversionMetersToGeoPoints(4.00)));
+                urlAPI.append("&swlng="+Double.toString(params[1]-Distance.fastConversionMetersToGeoPoints(4.00)));
+                urlAPI.append("&nelat="+Double.toString(params[0]+Distance.fastConversionMetersToGeoPoints(4.00)));
+                urlAPI.append("&nelng="+Double.toString(params[1]+Distance.fastConversionMetersToGeoPoints(4.00)));
+                urlAPI.append("&X-API-KEY=8b51UFM2SlBltx3s6864eUO1zSoefeK5");
+
+                Log.v("url", urlAPI.toString());
+                URL url = new URL(urlAPI.toString());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Accept", "application/json");
@@ -845,11 +858,21 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                 }
 
                 InputStream stream = conn.getInputStream();
+
                 try {
                     GeoJSONObject geoJSON = GeoJSON.parse(stream);
-                    JSONObject fgeoJson= geoJSON.toJSON().getJSONObject("features");
-                    fgeoJson.getString("geometry");
-                    Log.v("geoJson",fgeoJson.getString("geometry"));
+
+
+                   FeatureCollection featureCollection = new FeatureCollection(geoJSON.toJSON());
+                    List<Feature> featureList = featureCollection.getFeatures();
+
+
+
+                    for(int i=0; i< featureList.size();i++){
+                        System.out.println(featureList.get(i).getProperties().getString("href"));
+                        System.out.print("/////");
+                    }
+                    return featureList;
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -865,20 +888,60 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                 System.out.println("Output from Server .... \n");
                 while ((output = br.readLine()) != null) {
                     System.out.println(output);
-                }
+                }*/
 
-                conn.disconnect();*/
+                conn.disconnect();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
+
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute( List<Feature> features) {
+            if ( features.size()==0){
+                Context context = getApplicationContext();
+                CharSequence text = "No video for this location";
+                int duration = Toast.LENGTH_SHORT;
 
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+            else {
+
+                //for(int i=0; i< features.size();i++){
+
+                try {
+                    System.out.println(features.get(0).getProperties().getString("href")); // now always choosing the number index 1
+
+                    mVideo.setVideoPath(features.get(0).getProperties().getString("href"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+          //  }
+
+                    }
+
+
+
+
+
+
+
+
+                mediaController = new MediaController(CustomCameraActivity.this);
+                mediaController.setAnchorView(mVideo);
+                mVideo.setMediaController(mediaController);
+                mCloseVideo.setVisibility(View.VISIBLE);
+
+                mVideo.setVisibility(View.VISIBLE); // visible Videoview
+
+                mVideo.start();
+            }
 
         }
     }
-}
+
