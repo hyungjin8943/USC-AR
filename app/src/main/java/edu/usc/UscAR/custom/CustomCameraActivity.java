@@ -181,6 +181,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
         // We create the world and fill it
         mWorld = CustomHelperClass.generateObjects(this);
+
         mBeyondarFragment.setWorld(mWorld);
 
         // add the plugin(World + RadarView)
@@ -317,8 +318,13 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
         mDuration.setVisibility(View.INVISIBLE);
 
         mVideo = (VideoView) findViewById(R.id.camera_video);
-        mVideo.setZOrderOnTop(true);
         mVideo.setZOrderMediaOverlay(true);
+        mVideo.setZOrderOnTop(true);
+
+
+        mediaController = new MediaController(CustomCameraActivity.this);
+        mediaController.setAnchorView(mVideo);
+        mVideo.setMediaController(mediaController);
         mCloseVideo = (Button)findViewById(R.id.closeVideo);
         mCloseVideo.setOnClickListener(this);
         mCloseVideo.setVisibility(View.INVISIBLE);
@@ -714,6 +720,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                 if (distance < MAX_DISTANCE) {
                     //String image = "viewimage_" + geoObject.getmId();
                     geoObject.setVisible(true);
+
                     // int imageResource = this.getResources().getIdentifier(image, "drawable", this.getPackageName());
 
                     //geoObject.setGeoPosition(geoObject.getLatitude(), geoObject.getLongitude());
@@ -914,19 +921,15 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
 
                 try {
-                    System.out.println(features.get(0).getProperties().getString("href")); // now always choosing the number index 1
-                    Uri uri =Uri.parse(features.get(0).getProperties().getString("href"));
+
+                    System.out.println(features.get(5).getProperties().getString("href")); // now always choosing the number index 1
+                    Uri uri =Uri.parse(features.get(5).getProperties().getString("href"));
                     System.out.println(uri.toString());
-                    mediaController = new MediaController(CustomCameraActivity.this);
-                    mediaController.setAnchorView(mVideo);
 
-                    mVideo.setMediaController(mediaController);
                     mVideo.setVideoURI(uri);
-                    mCloseVideo.setVisibility(View.VISIBLE);
 
-                    mVideo.setVisibility(View.VISIBLE); // visible Videoview
 
-                     mVideo.start();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -936,14 +939,17 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                     }
 
 
+            mCloseVideo.setVisibility(View.VISIBLE);
+
+            mVideo.setVisibility(View.VISIBLE); // visible Videoview
+
+            mVideo.start();
 
 
 
 
 
-
-
-            }
+        }
 
         }
     }

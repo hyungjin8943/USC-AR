@@ -219,9 +219,10 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/play_button"
                 android:layout_margin="2dip" />
+
             <VideoView
                 android:layout_width="300dp"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:id="@+id/camera_video"
                 android:layout_above="@+id/audio_seekbar"
                 android:layout_margin="2dp"/>
