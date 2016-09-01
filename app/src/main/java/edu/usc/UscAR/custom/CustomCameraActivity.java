@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.hardware.Camera;
 import android.location.Location;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,9 +57,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -839,7 +838,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
             System.out.println(Double.toString(Distance.fastConversionMetersToGeoPoints(1.00)));
             try {
                 StringBuilder urlAPI = new StringBuilder();
-                urlAPI.append("http://mediaq.usc.edu/MediaQ_MVC_V3/api/geoq/rectangle_query?swlat=");
+                urlAPI.append("http://mediaq1.cloudapp.net/MediaQ_MVC_V3/api/geoq/rectangle_query?swlat=");
                 urlAPI.append(Double.toString(params[0]-Distance.fastConversionMetersToGeoPoints(4.00)));
                 urlAPI.append("&swlng="+Double.toString(params[1]-Distance.fastConversionMetersToGeoPoints(4.00)));
                 urlAPI.append("&nelat="+Double.toString(params[0]+Distance.fastConversionMetersToGeoPoints(4.00)));
@@ -913,10 +912,21 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
                 //for(int i=0; i< features.size();i++){
 
+
                 try {
                     System.out.println(features.get(0).getProperties().getString("href")); // now always choosing the number index 1
+                    Uri uri =Uri.parse(features.get(0).getProperties().getString("href"));
+                    System.out.println(uri.toString());
+                    mediaController = new MediaController(CustomCameraActivity.this);
+                    mediaController.setAnchorView(mVideo);
 
-                    mVideo.setVideoPath(features.get(0).getProperties().getString("href"));
+                    mVideo.setMediaController(mediaController);
+                    mVideo.setVideoURI(uri);
+                    mCloseVideo.setVisibility(View.VISIBLE);
+
+                    mVideo.setVisibility(View.VISIBLE); // visible Videoview
+
+                     mVideo.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -932,14 +942,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
 
 
-                mediaController = new MediaController(CustomCameraActivity.this);
-                mediaController.setAnchorView(mVideo);
-                mVideo.setMediaController(mediaController);
-                mCloseVideo.setVisibility(View.VISIBLE);
 
-                mVideo.setVisibility(View.VISIBLE); // visible Videoview
-
-                mVideo.start();
             }
 
         }
