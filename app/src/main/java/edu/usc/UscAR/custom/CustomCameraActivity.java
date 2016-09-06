@@ -918,19 +918,17 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
             }
             else {
 
-                //for(int i=0; i< features.size();i++){
-
-
                 try {
-
-                    System.out.println(features.get(0).getProperties().getString("href")); // now always choosing the number index 1
-                    Uri uri =Uri.parse(features.get(0).getProperties().getString("href"));
-                    System.out.println(uri.toString());
-
-                    mVideo.setVideoURI(uri);
-
-
-
+                    for(int i=0; i< features.size();i++){
+                        String mimeType = features.get(i).getProperties().getString("videoid");
+                        if (mimeType.contains(".mp4")) {
+                            System.out.println(features.get(i).getProperties().getString("href")); // now always choosing the number index 1
+                            Uri uri =Uri.parse(features.get(i).getProperties().getString("href"));
+                            System.out.println(uri.toString());
+                            mVideo.setVideoURI(uri);
+                            break;
+                        }
+                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
