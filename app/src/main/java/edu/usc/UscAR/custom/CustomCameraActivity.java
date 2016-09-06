@@ -550,7 +550,8 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                 mAudioSeekBar.setVisibility(View.VISIBLE);
                 mDuration.setVisibility(View.VISIBLE);
 
-                int resID = getResources().getIdentifier("shine", "raw", getPackageName());
+//                int resID = getResources().getIdentifier("shine", "raw", getPackageName());
+                int resID = getResources().getIdentifier(("ko_" + customGeoObject.getmId()), "raw", getPackageName());
                 mediaPlayer = new MediaPlayer();
                 // mediaController = new MediaController(CustomCameraActivity.this);
                 // mediaController.show();
@@ -922,8 +923,8 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
                 try {
 
-                    System.out.println(features.get(5).getProperties().getString("href")); // now always choosing the number index 1
-                    Uri uri =Uri.parse(features.get(5).getProperties().getString("href"));
+                    System.out.println(features.get(0).getProperties().getString("href")); // now always choosing the number index 1
+                    Uri uri =Uri.parse(features.get(0).getProperties().getString("href"));
                     System.out.println(uri.toString());
 
                     mVideo.setVideoURI(uri);

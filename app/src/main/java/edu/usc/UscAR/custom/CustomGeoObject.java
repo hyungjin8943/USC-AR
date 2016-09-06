@@ -2,6 +2,9 @@ package edu.usc.UscAR.custom;
 
 import com.beyondar.android.world.GeoObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Youngmin on 2016. 6. 2..
  */
@@ -19,7 +22,7 @@ public class CustomGeoObject extends GeoObject {
     private String address;
     private String accessmap;
     private String type;
-
+    private List<String> narrations = new ArrayList<String>();
 
     public CustomGeoObject(long id) {
         super(id);
@@ -126,5 +129,9 @@ public class CustomGeoObject extends GeoObject {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void addNarration(String narration) {
+        this.narrations.add(narration);
     }
 }

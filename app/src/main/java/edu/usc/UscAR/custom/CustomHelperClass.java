@@ -69,6 +69,7 @@ public class CustomHelperClass {
 
             geoObject.setGeoPosition(geoObject.getLatitude(), geoObject.getLongitude());
             geoObject.setImageResource(imageResource); // geoObject.setImageResource(R.drawable.creature_1);
+            geoObject.addNarration("ko_" + geoObject.getName());
             geoObject.setName(geoObject.getmName()); // Beyondar Object Id
             if(distance < CustomCameraActivity.MAX_DISTANCE) {
                 geoObject.setVisible(true);
