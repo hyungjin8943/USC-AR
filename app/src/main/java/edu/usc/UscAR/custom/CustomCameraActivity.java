@@ -134,6 +134,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
     private VideoView detailVideo;
     private Button detailClose;
 
+    private String result = "us_";
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -550,8 +551,10 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                 mAudioSeekBar.setVisibility(View.VISIBLE);
                 mDuration.setVisibility(View.VISIBLE);
 
+                selectCountry(customGeoObject.getmId());
+                /*
 //                int resID = getResources().getIdentifier("shine", "raw", getPackageName());
-                int resID = getResources().getIdentifier(("ko_" + customGeoObject.getmId()), "raw", getPackageName());
+                int resID = getResources().getIdentifier((result + customGeoObject.getmId()), "raw", getPackageName());
                 mediaPlayer = new MediaPlayer();
                 // mediaController = new MediaController(CustomCameraActivity.this);
                 // mediaController.show();
@@ -564,7 +567,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                 timeElapsed = mediaPlayer.getCurrentPosition();
                 mAudioSeekBar.setProgress((int) timeElapsed);
                 durationHandler.postDelayed(updateSeekBarTime, 100);
-
+                */
 
                 /*
                 String url = "http://www-scf.usc.edu/~shin630/Youngmin/musics/guitar/Shine_of_Silver_Thaw.mp3";
@@ -654,9 +657,9 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
     protected void startLocationUpdates() {
 
-        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
-        Log.d(TAG, "Location update started ..............: ");
+//        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
+//                mGoogleApiClient, mLocationRequest, this);
+//        Log.d(TAG, "Location update started ..............: ");
 
     }
 
@@ -846,6 +849,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
             System.out.println(Double.toString(Distance.fastConversionMetersToGeoPoints(1.00)));
             try {
                 StringBuilder urlAPI = new StringBuilder();
+                // Azure
                 urlAPI.append("http://mediaq1.cloudapp.net/MediaQ_MVC_V3/api/geoq/rectangle_query?swlat=");
                 urlAPI.append(Double.toString(params[0]-Distance.fastConversionMetersToGeoPoints(4.00)));
                 urlAPI.append("&swlng="+Double.toString(params[1]-Distance.fastConversionMetersToGeoPoints(4.00)));
@@ -947,9 +951,51 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
 
 
+        }
 
         }
 
+        private void selectCountry(final String id) {
+            final CharSequence[] items = {
+                    "United States", "China", "Korea"
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Make your country");
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    switch (item) {
+                        case 0:
+                            result = "us_";
+                            break;
+                        case 1:
+                            result = "ch_";
+                            break;
+                        case 2:
+                            result = "ko_";
+                            break;
+                    }
+
+                    int resID = getResources().getIdentifier((result + id), "raw", getPackageName());
+                    mediaPlayer = new MediaPlayer();
+                    // mediaController = new MediaController(CustomCameraActivity.this);
+                    // mediaController.show();
+                    mediaPlayer = MediaPlayer.create(CustomCameraActivity.this, resID);
+                    finalTime = mediaPlayer.getDuration();
+                    mAudioSeekBar.setMax((int) finalTime);
+                    mAudioSeekBar.setClickable(false);
+                    mediaPlayer.start(); // no need to call prepare(); create() does that for you
+
+                    timeElapsed = mediaPlayer.getCurrentPosition();
+                    mAudioSeekBar.setProgress((int) timeElapsed);
+                    durationHandler.postDelayed(updateSeekBarTime, 100);
+
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 
