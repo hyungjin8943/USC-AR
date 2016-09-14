@@ -134,7 +134,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
     private VideoView detailVideo;
     private Button detailClose;
 
-    private String result = "us_";
+    private String result = "en_";
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -957,18 +957,18 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
         private void selectCountry(final String id) {
             final CharSequence[] items = {
-                    "United States", "China", "Korea"
+                    "English", "Chinese", "Korean"
             };
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Make your country");
+            builder.setTitle("Select your language");
             builder.setItems(items, new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int item) {
                     switch (item) {
                         case 0:
-                            result = "us_";
+                            result = "en_";
                             break;
                         case 1:
                             result = "ch_";
