@@ -657,9 +657,9 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
     protected void startLocationUpdates() {
 
-//        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
-//                mGoogleApiClient, mLocationRequest, this);
-//        Log.d(TAG, "Location update started ..............: ");
+        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+        Log.d(TAG, "Location update started ..............: ");
 
     }
 
