@@ -1,10 +1,12 @@
 package edu.usc.UscAR.custom;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Surface;
@@ -76,6 +79,8 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+
+    private static final int REQUEST_CAMERA = 0;
 
     private MediaPlayer mediaPlayer;
     private MediaController mediaController;
@@ -161,6 +166,19 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                 .addOnConnectionFailedListener(this)
                 .build();
 
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED)|| (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)|| (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)){
+            // Camera permission has not been granted.
+
+            Log.i(TAG, "CAMERA permission has NOT been granted. Requesting permission.");
+
+            // Camera permission has not been granted yet. Request it directly.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CAMERA);
+        }
 
         // The first thing that we do is to remove all the generated temporal
         // images. Remember that the application needs external storage write
