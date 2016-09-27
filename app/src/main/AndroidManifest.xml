@@ -36,13 +36,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="edu.usc.UscAR.BeyondarExamples"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity android:name="edu.usc.UscAR.SimpleCameraActivity" />
         <activity android:name="edu.usc.UscAR.GoogleMapActivity" />
         <activity android:name="edu.usc.UscAR.CameraWithTouchEventsActivity" />
@@ -70,7 +64,15 @@
 
         <activity
             android:name="edu.usc.UscAR.custom.CustomCameraActivity"
-            android:label="@string/title_activity_custom_main" />
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="edu.usc.UscAR.custom.CustomMapActivity"
             android:label="@string/title_activity_custom_map" />
