@@ -64,7 +64,7 @@ public class BeyondarExamples extends Activity implements OnItemClickListener {
 					REQUEST_CAMERA);
 
 		}
-
+		openActivity(CustomCameraActivity.class);
 		fillList();
 	}
 
