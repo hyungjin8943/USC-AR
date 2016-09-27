@@ -992,6 +992,18 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
                     mAudioSeekBar.setProgress((int) timeElapsed);
                     durationHandler.postDelayed(updateSeekBarTime, 100);
 
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mPlay.setVisibility(View.GONE);
+                            mStop.setVisibility(View.GONE);
+                            mPause.setVisibility(View.GONE);
+                            mAudioSeekBar.setVisibility(View.GONE);
+                            mDuration.setVisibility(View.GONE);
+                        }
+                    });
+
                 }
             });
             AlertDialog alert = builder.create();
