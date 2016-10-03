@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -998,9 +999,13 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
                     int resID = getResources().getIdentifier((result + id), "raw", getPackageName());
                     mediaPlayer = new MediaPlayer();
-                    // mediaController = new MediaController(CustomCameraActivity.this);
-                    // mediaController.show();
-                    mediaPlayer = MediaPlayer.create(CustomCameraActivity.this, resID);
+                    try {
+                        mediaPlayer = MediaPlayer.create(CustomCameraActivity.this, resID);
+                    } catch (Resources.NotFoundException e) {
+                        Toast.makeText(CustomCameraActivity.this, R.string.no_narration, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     finalTime = mediaPlayer.getDuration();
                     mAudioSeekBar.setMax((int) finalTime);
                     mAudioSeekBar.setClickable(false);
