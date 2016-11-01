@@ -23,114 +23,58 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.Window;
+import android.widget.ImageView;
 
 import com.beyondar.example.R;
 
 import edu.usc.UscAR.custom.CustomCameraActivity;
 
-public class BeyondarExamples extends Activity implements OnItemClickListener {
+public class BeyondarExamples extends Activity {
 
-	private static final int REQUEST_CAMERA = 0;
-	private static final int REQUEST_LOCATION =1;
-	public static final String TAG = "CustomCameraActivity";
-	private ListView mLisViewt;
-	private String[] values = new String[] { "Simple AR camera",
-			"Simple camera with a max/min distance far for rendering", "BeyondAR World in Google maps",
-			"AR camera with Gooogle maps", "Camera with touch events", "Camera with screenshot",
-			"Change GeoObject images on touch", "Attach view to GeoObject", "Set static view to geoObject",
-			"Customize sensor filter", "Simple AR camera with a radar view",
-			"Using BeyondarLocationManager","Custom Camera Activity" };
+    private static final int REQUEST_CAMERA = 0;
+    private static final String TAG = "CustomCameraActivity";
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		mLisViewt = (ListView) findViewById(R.id.examplesList);
-		if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-				!= PackageManager.PERMISSION_GRANTED)|| (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-				!= PackageManager.PERMISSION_GRANTED)|| (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-				!= PackageManager.PERMISSION_GRANTED)){
-			// Camera permission has not been granted.
+    private ImageView imageView;
 
-			Log.i(TAG, "CAMERA permission has NOT been granted. Requesting permission.");
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.main);
+        imageView = (ImageView) findViewById(R.id.ar_backgroud);
 
-			// Camera permission has not been granted yet. Request it directly.
-			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION,
-							Manifest.permission.ACCESS_COARSE_LOCATION},
-					REQUEST_CAMERA);
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)) {
+            // Camera permission has not been granted.
 
-		}
-		openActivity(CustomCameraActivity.class);
-		fillList();
-	}
+            Log.i(TAG, "CAMERA permission has NOT been granted. Requesting permission.");
 
-	private void fillList() {
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-				values);
-		mLisViewt.setAdapter(adapter);
-		mLisViewt.setOnItemClickListener(this);
-	}
+            // Camera permission has not been granted yet. Request it directly.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CAMERA);
+        }
 
+        imageView.setOnClickListener(new View.OnClickListener() {
 
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
-		switch (pos) {
-			case 0:
-				openActivity(SimpleCameraActivity.class);
-				break;
-			case 1:
-				openActivity(SimpleCameraWithMaxFarMinAwayActivity.class);
-				break;
-			case 2:
-				openActivity(GoogleMapActivity.class);
-				break;
-			case 3:
-				openActivity(CameraWithGoogleMapsActivity.class);
-				break;
-			case 4:
-				openActivity(CameraWithTouchEventsActivity.class);
-				break;
-			case 5:
-				openActivity(CameraWithScreenShotActivity.class);
-				break;
-			case 6:
-				openActivity(ChangeGeoObjectImagesOnTouchActivity.class);
-				break;
-			case 7:
-				openActivity(AttachViewToGeoObjectActivity.class);
-				break;
-			case 8:
-				openActivity(StaticViewGeoObjectActivity.class);
-				break;
-			case 9:
-				openActivity(SimpleCameraWithCustomFilterActivity.class);
-				break;
-			case 10:
-				openActivity(SimpleCameraWithRadarActivity.class);
-				break;
-			case 11:
-				openActivity(BeyondarLocationManagerMapActivity.class);
-				break;
-			case 12:
-				openActivity(CustomCameraActivity.class);
-			default:
-				break;
-		}
-	}
+            @Override
+            public void onClick(View v) {
+                startCameraActivity();
+            }
+        });
+    }
 
-	private void openActivity(Class<? extends Activity> ActivityClass) {
-		Intent intent = new Intent(this, ActivityClass);
-		startActivity(intent);
-	}
+    private void startCameraActivity() {
+        Intent intent = new Intent(BeyondarExamples.this, CustomCameraActivity.class);
+        startActivity(intent);
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		CustomWorldHelper.sharedWorld = null;
-	}
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CustomWorldHelper.sharedWorld = null;
+    }
 }
