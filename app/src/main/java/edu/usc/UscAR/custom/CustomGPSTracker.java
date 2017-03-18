@@ -16,8 +16,7 @@ import android.widget.Toast;
 
 import com.beyondar.android.fragment.BeyondarFragmentSupport;
 import com.beyondar.android.util.math.Distance;
-import com.beyondar.example.R;
-
+import edu.usc.UscAR.R;
 /**
  * Created by Youngmin on 2016. 5. 29..
  */
@@ -201,7 +200,7 @@ public class CustomGPSTracker extends Service implements LocationListener {
 
         USCMapJSONLocal uscMapLocal = new USCMapJSONLocal();
         String jsonStr = uscMapLocal.readFromFile(mContext);
-        uscMapLocal.jsonConverter(jsonStr);
+        uscMapLocal.jsonConverter(mContext, jsonStr);
 
         CustomHelperClass.sharedWorld.clearWorld();
         CustomHelperClass.sharedWorld.setDefaultImage(R.drawable.beyondar_default_unknow_icon);

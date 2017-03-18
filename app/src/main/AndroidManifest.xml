@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.beyondar.example"
-    android:versionCode="000902"
-    android:versionName="0.9.2">
+    package="edu.usc.UscAR">
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -35,7 +33,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="edu.usc.UscAR.BeyondarExamples"
+            android:name=".BeyondarExamples"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,18 +41,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="edu.usc.UscAR.SimpleCameraActivity" />
-        <activity android:name="edu.usc.UscAR.GoogleMapActivity" />
-        <activity android:name="edu.usc.UscAR.CameraWithTouchEventsActivity" />
-        <activity android:name="edu.usc.UscAR.CameraWithGoogleMapsActivity" />
-        <activity android:name="edu.usc.UscAR.SimpleCameraWithMaxFarMinAwayActivity" />
-        <activity android:name="edu.usc.UscAR.CameraWithScreenShotActivity" />
-        <activity android:name="edu.usc.UscAR.ChangeGeoObjectImagesOnTouchActivity" />
-        <activity android:name="edu.usc.UscAR.AttachViewToGeoObjectActivity" />
-        <activity android:name="edu.usc.UscAR.StaticViewGeoObjectActivity" />
-        <activity android:name="edu.usc.UscAR.SimpleCameraWithCustomFilterActivity" />
-        <activity android:name="edu.usc.UscAR.SimpleCameraWithRadarActivity" />
-        <activity android:name="edu.usc.UscAR.BeyondarLocationManagerMapActivity" />
+        <activity android:name=".SimpleCameraActivity" />
+        <activity android:name=".GoogleMapActivity" />
+        <activity android:name=".CameraWithTouchEventsActivity" />
+        <activity android:name=".CameraWithGoogleMapsActivity" />
+        <activity android:name=".SimpleCameraWithMaxFarMinAwayActivity" />
+        <activity android:name=".CameraWithScreenShotActivity" />
+        <activity android:name=".ChangeGeoObjectImagesOnTouchActivity" />
+        <activity android:name=".AttachViewToGeoObjectActivity" />
+        <activity android:name=".StaticViewGeoObjectActivity" />
+        <activity android:name=".SimpleCameraWithCustomFilterActivity" />
+        <activity android:name=".SimpleCameraWithRadarActivity" />
+        <activity android:name=".BeyondarLocationManagerMapActivity" />
 
         <!--
              <meta-data
@@ -69,16 +67,28 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="edu.usc.UscAR.custom.CustomCameraActivity"
-            android:screenOrientation="landscape"
+            android:name=".custom.CustomCameraActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_custom_main" />
+            android:label="@string/title_activity_custom_main"
+            android:screenOrientation="landscape" />
         <activity
-            android:name="edu.usc.UscAR.custom.CustomMapActivity"
+            android:name=".custom.CustomMapActivity"
             android:label="@string/title_activity_custom_map" />
         <activity
-            android:name="edu.usc.UscAR.custom.CustomSearchActivity"
+            android:name=".custom.CustomSearchActivity"
             android:label="@string/title_activity_custom_search"></activity>
+
+        <provider
+            android:name=".db.UscARProvider"
+            android:authorities="uscar"
+            android:exported="true"
+            android:multiprocess="true"></provider>
+        <provider
+            android:name=".pref.PreferenceProvider"
+            android:authorities="uscar_pref"
+            android:exported="true"
+            android:multiprocess="true"></provider>
     </application>
+
 
 </manifest>

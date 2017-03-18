@@ -28,7 +28,7 @@ import com.beyondar.android.view.OnClickBeyondarObjectListener;
 import com.beyondar.android.view.OnTouchBeyondarViewListener;
 import com.beyondar.android.world.BeyondarObject;
 import com.beyondar.android.world.World;
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 import java.util.ArrayList;
 import java.util.Iterator;

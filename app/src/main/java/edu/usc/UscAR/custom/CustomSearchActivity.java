@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 import java.util.ArrayList;
 

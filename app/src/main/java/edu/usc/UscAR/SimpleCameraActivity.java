@@ -21,7 +21,7 @@ import android.view.Window;
 
 import com.beyondar.android.fragment.BeyondarFragmentSupport;
 import com.beyondar.android.world.World;
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 public class SimpleCameraActivity extends FragmentActivity {
 

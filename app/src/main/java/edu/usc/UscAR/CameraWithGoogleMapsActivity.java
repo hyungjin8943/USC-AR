@@ -25,7 +25,7 @@ import android.widget.Button;
 
 import com.beyondar.android.fragment.BeyondarFragmentSupport;
 import com.beyondar.android.world.World;
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 public class CameraWithGoogleMapsActivity extends FragmentActivity implements OnClickListener {
 

@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.beyondar.android.fragment.BeyondarFragmentSupport;
 import com.beyondar.android.opengl.util.LowPassFilter;
 import com.beyondar.android.world.World;
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 public class SimpleCameraWithCustomFilterActivity extends FragmentActivity implements OnSeekBarChangeListener {
 
