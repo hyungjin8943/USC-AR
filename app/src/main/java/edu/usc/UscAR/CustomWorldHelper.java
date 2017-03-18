@@ -20,7 +20,7 @@ import android.content.Context;
 
 import com.beyondar.android.world.GeoObject;
 import com.beyondar.android.world.World;
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 @SuppressLint("SdCardPath")
 public class CustomWorldHelper {

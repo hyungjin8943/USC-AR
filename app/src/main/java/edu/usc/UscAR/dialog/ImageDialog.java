@@ -10,8 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.beyondar.example.R;
-
+import edu.usc.UscAR.R;
 
 public class ImageDialog extends DialogFragment {
 

@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 import edu.usc.UscAR.custom.CustomCameraActivity;
 

@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.beyondar.android.fragment.BeyondarFragmentSupport;
 import com.beyondar.android.world.World;
-import com.beyondar.example.R;
+import edu.usc.UscAR.R;
 
 public class SimpleCameraWithMaxFarMinAwayActivity extends FragmentActivity implements OnSeekBarChangeListener {
 

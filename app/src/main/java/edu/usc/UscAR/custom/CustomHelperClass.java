@@ -2,17 +2,22 @@ package edu.usc.UscAR.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.beyondar.android.util.math.Distance;
 import com.beyondar.android.world.World;
-import com.beyondar.example.R;
+
+import edu.usc.UscAR.R;
+import edu.usc.UscAR.pref.PreferenceManager;
 
 /**
  * Created by Youngmin on 2016. 5. 29..
  */
 @SuppressLint("SdCardPath")
 public class CustomHelperClass {
+    private final static String TAG = "CustomHelperClass";
+
     public static final int LIST_TYPE_EXAMPLE_1 = 1;
 
     public static World sharedWorld;
@@ -50,11 +55,19 @@ public class CustomHelperClass {
         sharedWorld.setGeoPosition(34.021774292, -118.2829284668); // Initial: USC Leavey Library
 
         USCMapJSONLocal uscMapLocal = new USCMapJSONLocal();
-        String jsonStr = uscMapLocal.readFromFile(myContext);
-        uscMapLocal.jsonConverter(jsonStr);
+        if (PreferenceManager.getPreferenceManager(myContext.getApplicationContext()).getValue(PreferenceManager.KEY_USC_AR_DEFAULT_INIT, 0) == 0) {
+            Log.i(TAG, "From JSON");
+            String jsonStr = uscMapLocal.readFromFile(myContext);
+            uscMapLocal.jsonConverter(myContext, jsonStr);
+            PreferenceManager.getPreferenceManager(myContext.getApplicationContext()).putValue(PreferenceManager.KEY_USC_AR_DEFAULT_INIT, 1);
+            Log.i(TAG, "buildingArray size = " + uscMapLocal.buildingArray.size());
+        } else {
+            Log.i(TAG, "From DB");
+            uscMapLocal.databseConverter(myContext);
+            Log.i(TAG, "buildingArray size = " + uscMapLocal.buildingArray.size());
+        }
 
-
-        for(int i=0; i<uscMapLocal.buildingArray.size(); i++) {
+        for (int i = 0; i < uscMapLocal.buildingArray.size(); i++) {
 
             CustomGeoObject geoObject = new CustomGeoObject(i);
             geoObject = uscMapLocal.buildingArray.get(i);
@@ -71,14 +84,13 @@ public class CustomHelperClass {
             geoObject.setImageResource(imageResource); // geoObject.setImageResource(R.drawable.creature_1);
             geoObject.addNarration("ko_" + geoObject.getName());
             geoObject.setName(geoObject.getmName()); // Beyondar Object Id
-            if(distance < CustomCameraActivity.MAX_DISTANCE) {
+            if (distance < CustomCameraActivity.MAX_DISTANCE) {
                 geoObject.setVisible(true);
 
-            }else{
+            } else {
                 geoObject.setVisible(false);
             }
             sharedWorld.addBeyondarObject(geoObject);
-
         }
 
         return sharedWorld;
@@ -93,8 +105,6 @@ public class CustomHelperClass {
     }
 
     public static void Resume() { // when camera view is resumed
-
-
 
 
         Toast.makeText(myContext, "Resume", Toast.LENGTH_LONG).show();
