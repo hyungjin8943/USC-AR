@@ -92,7 +92,7 @@ public class UscARProvider extends ContentProvider {
             try {
                 finalValues = new ContentValues(values);
                 long timeInMillis = System.currentTimeMillis();
-                String path = getContext().getDir("uscar", 0).getPath() + "/USCAR" + timeInMillis;
+                String path = getContext().getDir("uscar", 0).getPath() + "/USCAR_" + timeInMillis;
                 finalValues.put(UscARConstant.UscARField.DATA, path);
                 if ((rowId = db.insert(table, null, finalValues)) <= 0) {
                     return null;

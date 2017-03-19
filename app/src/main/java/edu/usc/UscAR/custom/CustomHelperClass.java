@@ -2,6 +2,8 @@ package edu.usc.UscAR.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,6 +11,7 @@ import com.beyondar.android.util.math.Distance;
 import com.beyondar.android.world.World;
 
 import edu.usc.UscAR.R;
+import edu.usc.UscAR.db.UscARPersister;
 import edu.usc.UscAR.pref.PreferenceManager;
 
 /**
@@ -59,7 +62,6 @@ public class CustomHelperClass {
             Log.i(TAG, "From JSON");
             String jsonStr = uscMapLocal.readFromFile(myContext);
             uscMapLocal.jsonConverter(myContext, jsonStr);
-            PreferenceManager.getPreferenceManager(myContext.getApplicationContext()).putValue(PreferenceManager.KEY_USC_AR_DEFAULT_INIT, 1);
             Log.i(TAG, "buildingArray size = " + uscMapLocal.buildingArray.size());
         } else {
             Log.i(TAG, "From DB");
@@ -69,19 +71,26 @@ public class CustomHelperClass {
 
         for (int i = 0; i < uscMapLocal.buildingArray.size(); i++) {
 
-            CustomGeoObject geoObject = new CustomGeoObject(i);
-            geoObject = uscMapLocal.buildingArray.get(i);
+            CustomGeoObject geoObject = uscMapLocal.buildingArray.get(i);
 
             // Log.e("distance1", Double.toString(Distance.calculateDistanceMeters(longitude, latitude, geoObject.getLongitude(), geoObject.getLatitude())));
 
             double distance = Distance.calculateDistanceMeters(longitude, latitude, geoObject.getLongitude(), geoObject.getLatitude());
 
 
-            String image = "viewimage_" + geoObject.getmId();
-            int imageResource = context.getResources().getIdentifier(image, "drawable", context.getPackageName());
-
+            UscARPersister persister = UscARPersister.getUscARPersister(myContext);
+            if (PreferenceManager.getPreferenceManager(myContext.getApplicationContext()).getValue(PreferenceManager.KEY_USC_AR_DEFAULT_INIT, 0) == 0) {
+                String image = "viewimage_" + geoObject.getmId();
+                int imageResource = context.getResources().getIdentifier(image, "drawable", context.getPackageName());
+                geoObject.setImageResource(imageResource); // geoObject.setImageResource(R.drawable.creature_1);
+                Uri uri = persister.getARUri(geoObject.getmId());
+                if (uri != null) {
+                    persister.saveResBitmap(uri, BitmapFactory.decodeResource(myContext.getResources(), imageResource));
+                }
+            } else {
+                geoObject.setImageUri(persister.getPhoto(geoObject.getmId()));
+            }
             geoObject.setGeoPosition(geoObject.getLatitude(), geoObject.getLongitude());
-            geoObject.setImageResource(imageResource); // geoObject.setImageResource(R.drawable.creature_1);
             geoObject.addNarration("ko_" + geoObject.getName());
             geoObject.setName(geoObject.getmName()); // Beyondar Object Id
             if (distance < CustomCameraActivity.MAX_DISTANCE) {
