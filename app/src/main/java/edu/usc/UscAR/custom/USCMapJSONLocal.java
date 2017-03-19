@@ -123,8 +123,7 @@ public class USCMapJSONLocal {
             poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(UscARConstant.UscARField.SHORT)));
             poi.setLatitude(Double.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(UscARConstant.UscARField.LATITUDE))));
             poi.setLongitude(Double.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(UscARConstant.UscARField.LONGITUDE))));
-            // TODO
-//            poi.setPhoto(cursor.getInt(cursor.getColumnIndexOrThrow(UscARConstant.UscARField._ID));
+            poi.setPhoto(cursor.getString(cursor.getColumnIndexOrThrow(UscARConstant.UscARField.DATA)));
             poi.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(UscARConstant.UscARField.URL)));
             poi.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(UscARConstant.UscARField.ADDRESS)));
 

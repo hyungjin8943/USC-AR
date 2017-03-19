@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import edu.usc.UscAR.CustomWorldHelper;
+import edu.usc.UscAR.pref.PreferenceManager;
 
 
 public class CustomCameraActivity extends FragmentActivity implements OnClickListener, SeekBar.OnSeekBarChangeListener,
@@ -201,6 +202,7 @@ public class CustomCameraActivity extends FragmentActivity implements OnClickLis
 
         // We create the world and fill it
         mWorld = CustomHelperClass.generateObjects(this);
+        PreferenceManager.getPreferenceManager(this.getApplicationContext()).putValue(PreferenceManager.KEY_USC_AR_DEFAULT_INIT, 1);
 
         mBeyondarFragment.setWorld(mWorld);
 

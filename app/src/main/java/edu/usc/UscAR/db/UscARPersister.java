@@ -1,9 +1,16 @@
 package edu.usc.UscAR.db;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import edu.usc.UscAR.custom.CustomGeoObject;
 
@@ -42,5 +49,78 @@ public class UscARPersister {
         values.put(UscARConstant.UscARField.URL, obj.getUrl());
         values.put(UscARConstant.UscARField.ADDRESS, obj.getAddress());
         return mContentResolver.insert(UscARConstant.UscARField.CONTENT_URI, values);
+    }
+
+    public void saveResBitmap(Uri uri, Bitmap bitmap) {
+        OutputStream outputStream = null;
+        try {
+            outputStream = mContentResolver.openOutputStream(uri);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public Uri getARUri(String ar_id) {
+        Uri retVal = null;
+        Cursor cursor = mContentResolver.query(UscARConstant.UscARField.CONTENT_URI, new String[]{UscARConstant.UscARField._ID}, getSelection(ar_id), null, null);
+
+        if (cursor == null) {
+            return retVal;
+        }
+
+        if (cursor.getCount() == 0) {
+            cursor.close();
+            return retVal;
+        }
+
+        cursor.moveToNext();
+        int id = cursor.getInt(cursor.getColumnIndexOrThrow(UscARConstant.UscARField._ID));
+        retVal = ContentUris.withAppendedId(UscARConstant.UscARField.CONTENT_URI, id);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return retVal;
+    }
+
+    private String getSelection(String ar_id) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(UscARConstant.UscARField.AR_ID);
+        sb.append(" = ");
+        sb.append(Integer.valueOf(ar_id));
+        return sb.toString();
+    }
+
+    public String getPhoto(String ar_id) {
+        String retVal = null;
+        Cursor cursor = mContentResolver.query(UscARConstant.UscARField.CONTENT_URI, new String[]{UscARConstant.UscARField.DATA}, getSelection(ar_id), null, null);
+
+        if (cursor == null) {
+            return retVal;
+        }
+
+        if (cursor.getCount() == 0) {
+            cursor.close();
+            return retVal;
+        }
+
+        cursor.moveToNext();
+        retVal = cursor.getString(cursor.getColumnIndexOrThrow(UscARConstant.UscARField.DATA));
+        if (cursor != null) {
+            cursor.close();
+        }
+        return retVal;
     }
 }
