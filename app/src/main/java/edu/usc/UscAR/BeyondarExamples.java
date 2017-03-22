@@ -17,23 +17,47 @@ package edu.usc.UscAR;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import edu.usc.UscAR.R;
 
 import edu.usc.UscAR.custom.CustomCameraActivity;
+import edu.usc.UscAR.custom.CustomGeoObject;
+import edu.usc.UscAR.db.UscARPersister;
 
 public class BeyondarExamples extends Activity {
 
     private static final int REQUEST_CAMERA = 0;
-    private static final String TAG = "CustomCameraActivity";
+    private static final String TAG = "BeyondarExamples";
+
+    public static final String ARPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/USCAR";
+    public static final String ARImagePath = ARPath + "/ar_images/";
+
+    private Context mContext;
 
     private ImageView imageView;
 
@@ -42,6 +66,7 @@ public class BeyondarExamples extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+        mContext = BeyondarExamples.this;
         imageView = (ImageView) findViewById(R.id.ar_backgroud);
 
         if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -65,6 +90,7 @@ public class BeyondarExamples extends Activity {
                 startCameraActivity();
             }
         });
+        makeDirectory();
     }
 
     private void startCameraActivity() {
@@ -76,5 +102,108 @@ public class BeyondarExamples extends Activity {
     protected void onResume() {
         super.onResume();
         CustomWorldHelper.sharedWorld = null;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menu_import:
+                ImportAsynTask asyncTask = new ImportAsynTask();
+                asyncTask.execute();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public class ImportAsynTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            importJsonFile();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(mContext, mContext.getString(R.string.import_done), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void importJsonFile() {
+        String jsonStr = getReadJsonFile();
+        if (jsonStr != null) {
+            Log.i(TAG, "jsonStr =" + jsonStr);
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(jsonStr);
+                JSONArray ar = jsonObject.getJSONArray("ar");
+                for (int i = 0; i < ar.length(); i++) {
+                    JSONObject jsonObj = ar.getJSONObject(i);
+                    CustomGeoObject poi = new CustomGeoObject();
+                    poi.setmId(jsonObj.getString("ar_id"));
+                    poi.setCode(jsonObj.getString("code"));
+                    poi.setmName(jsonObj.getString("name"));
+                    poi.setLatitude(jsonObj.getDouble("latitude"));
+                    poi.setLongitude(jsonObj.getDouble("longitude"));
+                    poi.setPhoto(jsonObj.getString("photo"));
+                    poi.setUrl(jsonObj.getString("url"));
+                    poi.setAddress(jsonObj.getString("address"));
+                    poi.setDescription(jsonObj.getString("short"));
+                    UscARPersister.getUscARPersister(mContext.getApplicationContext()).insertUscARFromExtension(poi);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String getReadJsonFile() {
+        File myFile = new File(ARPath + "/ar.json");
+        FileInputStream fIn = null;
+        try {
+            fIn = new FileInputStream(myFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader myReader = new BufferedReader(
+                new InputStreamReader(fIn));
+        String aDataRow = "";
+        StringBuilder aBuffer = new StringBuilder();
+        try {
+            while ((aDataRow = myReader.readLine()) != null) {
+                aBuffer.append(aDataRow);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return aBuffer.toString();
+    }
+
+    private void makeDirectory() {
+        String str = Environment.getExternalStorageState();
+        if (str.equals(Environment.MEDIA_MOUNTED)) {
+
+            String dirPath = ARPath;
+            File file = new File(dirPath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+        }
     }
 }
