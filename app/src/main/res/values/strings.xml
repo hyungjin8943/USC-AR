@@ -6,5 +6,7 @@
     <string name="title_activity_custom_map">CustomMapActivity</string>
     <string name="title_activity_custom_search">CustomSearchActivity</string>
     <string name="no_narration">There is no narration.</string>
+    <string name="import_extension">Import</string>
+    <string name="import_done">Import Done</string>
 
 </resources>

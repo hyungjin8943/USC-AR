@@ -1,6 +1,5 @@
 package edu.usc.UscAR.custom;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -92,7 +91,7 @@ public class USCMapJSONLocal {
                 poi.setAddress(jsonObj.getString("address"));
                 poi.setDescription(jsonObj.getString("short"));
 
-                UscARPersister.getUscARPersister(context.getApplicationContext()).insertUscAR(poi);
+                UscARPersister.getUscARPersister(context.getApplicationContext()).insertUscARFromDefault(poi);
 
                 buildingArray.add(i, poi);
             }

@@ -6,12 +6,17 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import edu.usc.UscAR.BeyondarExamples;
 import edu.usc.UscAR.custom.CustomGeoObject;
 
 public class UscARPersister {
@@ -38,7 +43,7 @@ public class UscARPersister {
         return sPersister;
     }
 
-    public Uri insertUscAR(CustomGeoObject obj) {
+    public Uri insertUscARFromDefault(CustomGeoObject obj) {
         ContentValues values = new ContentValues(8);
         values.put(UscARConstant.UscARField.AR_ID, obj.getmId());
         values.put(UscARConstant.UscARField.CODE, obj.getCode());
@@ -49,6 +54,49 @@ public class UscARPersister {
         values.put(UscARConstant.UscARField.URL, obj.getUrl());
         values.put(UscARConstant.UscARField.ADDRESS, obj.getAddress());
         return mContentResolver.insert(UscARConstant.UscARField.CONTENT_URI, values);
+    }
+
+    public void insertUscARFromExtension(CustomGeoObject obj) {
+        boolean isNewData = false;
+        Uri arUri = null;
+        ContentValues values = new ContentValues(8);
+        Cursor cursor = mContentResolver.query(UscARConstant.UscARField.CONTENT_URI, new String[]{UscARConstant.UscARField._ID},
+                getSelection(obj.getmId()), null, null);
+
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToNext();
+                arUri = ContentUris.withAppendedId(UscARConstant.UscARField.CONTENT_URI, cursor.getInt(cursor.getColumnIndexOrThrow(UscARConstant.UscARField._ID)));
+            } else {
+                isNewData = true;
+            }
+        } else {
+            isNewData = true;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        values.put(UscARConstant.UscARField.AR_ID, obj.getmId());
+        values.put(UscARConstant.UscARField.CODE, obj.getCode());
+        values.put(UscARConstant.UscARField.NAME, obj.getmName());
+        values.put(UscARConstant.UscARField.SHORT, obj.getDescription());
+        values.put(UscARConstant.UscARField.LATITUDE, String.valueOf(obj.getLatitude()));
+        values.put(UscARConstant.UscARField.LONGITUDE, String.valueOf(obj.getLongitude()));
+        values.put(UscARConstant.UscARField.URL, obj.getUrl());
+        values.put(UscARConstant.UscARField.ADDRESS, obj.getAddress());
+
+        if (isNewData) {
+            arUri = mContentResolver.insert(UscARConstant.UscARField.CONTENT_URI, values);
+        } else {
+            mContentResolver.update(arUri, values, null, null);
+        }
+
+        if (arUri != null) {
+            Log.i(TAG, "photo = " + obj.getPhoto());
+            saveResBitmap(arUri, getBitmap(BeyondarExamples.ARImagePath + obj.getPhoto()));
+        }
     }
 
     public void saveResBitmap(Uri uri, Bitmap bitmap) {
@@ -122,5 +170,18 @@ public class UscARPersister {
             cursor.close();
         }
         return retVal;
+    }
+
+    public Bitmap getBitmap(String path) {
+        Bitmap bitmap = null;
+        File f = new File(path);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        try {
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }
