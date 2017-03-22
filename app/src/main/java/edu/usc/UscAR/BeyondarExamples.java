@@ -54,7 +54,8 @@ public class BeyondarExamples extends Activity {
     private static final int REQUEST_CAMERA = 0;
     private static final String TAG = "BeyondarExamples";
 
-    public static final String ARPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/USCAR";
+//    public static final String ARPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/USCAR";
+    public static final String ARPath = "/sdcard/USCAR";
     public static final String ARImagePath = ARPath + "/ar_images/";
 
     private Context mContext;
@@ -196,14 +197,15 @@ public class BeyondarExamples extends Activity {
     }
 
     private void makeDirectory() {
-        String str = Environment.getExternalStorageState();
-        if (str.equals(Environment.MEDIA_MOUNTED)) {
+//        String str = Environment.getExternalStorageState();
+//        if (str.equals(Environment.MEDIA_MOUNTED)) {
 
             String dirPath = ARPath;
             File file = new File(dirPath);
             if (!file.exists()) {
+//                Toast.makeText(mContext, "Make Directory", Toast.LENGTH_SHORT).show();
                 file.mkdirs();
             }
-        }
+//        }
     }
 }
