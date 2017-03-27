@@ -79,7 +79,7 @@ public class BeyondarExamples extends Activity {
             Log.i(TAG, "CAMERA permission has NOT been granted. Requesting permission.");
 
             // Camera permission has not been granted yet. Request it directly.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION,
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_CAMERA);
         }
@@ -200,12 +200,22 @@ public class BeyondarExamples extends Activity {
 //        String str = Environment.getExternalStorageState();
 //        if (str.equals(Environment.MEDIA_MOUNTED)) {
 
-            String dirPath = ARPath;
-            File file = new File(dirPath);
-            if (!file.exists()) {
-//                Toast.makeText(mContext, "Make Directory", Toast.LENGTH_SHORT).show();
-                file.mkdirs();
+
+        //   String dirPath = ARPath;
+//            File file = new File(dirPath);
+//            if (!file.exists()) {
+//            Toast.makeText(mContext, "Make Directory", Toast.LENGTH_SHORT).show();
+//                file.mkdirs();
+//            }
+////        }
+           File directroy = new File("/sdcard/USCAR/");
+            if(!directroy.exists()){
+                if(!directroy.mkdirs())
+                    Toast.makeText(mContext, "Can't Make Directory", Toast.LENGTH_SHORT).show();
+            }else{
+                directroy.mkdirs();
             }
-//        }
+
+
     }
 }
