@@ -80,7 +80,7 @@ public class BeyondarExamples extends AppCompatActivity {
             Log.i(TAG, "CAMERA permission has NOT been granted. Requesting permission.");
 
             // Camera permission has not been granted yet. Request it directly.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION,
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_CAMERA);
         }
@@ -198,10 +198,12 @@ public class BeyondarExamples extends AppCompatActivity {
     }
 
     private void makeDirectory() {
-        String dirPath = ARPath;
-        File file = new File(dirPath);
-        if (!file.exists()) {
-            file.mkdirs();
+      File directroy = new File(ARPath);
+      if (!directroy.exists()){
+        if (!directroy.mkdirs()) {
+        // Toast.makeText(mContext, "Can't Make Directory", Toast.LENGTH_SHORT).show();
+        } else {
+          directroy.mkdirs();
         }
     }
 

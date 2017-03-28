@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Youngmin on 2016. 6. 2..
+ * Created by  on 2016. 6. 2..
  */
 public class CustomGeoObject extends GeoObject {
     private double mAltitude;
