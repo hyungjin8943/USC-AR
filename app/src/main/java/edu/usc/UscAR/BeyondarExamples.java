@@ -16,19 +16,18 @@
 package edu.usc.UscAR;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -49,26 +48,28 @@ import edu.usc.UscAR.custom.CustomCameraActivity;
 import edu.usc.UscAR.custom.CustomGeoObject;
 import edu.usc.UscAR.db.UscARPersister;
 
-public class BeyondarExamples extends Activity {
+public class BeyondarExamples extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA = 0;
     private static final String TAG = "BeyondarExamples";
 
-//    public static final String ARPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/USCAR";
+    //    public static final String ARPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/USCAR";
     public static final String ARPath = "/sdcard/USCAR";
     public static final String ARImagePath = ARPath + "/ar_images/";
 
     private Context mContext;
+
+    private Toolbar mToolbar;
 
     private ImageView imageView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
         mContext = BeyondarExamples.this;
         imageView = (ImageView) findViewById(R.id.ar_backgroud);
+        initActionBar();
 
         if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -125,7 +126,7 @@ public class BeyondarExamples extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class ImportAsynTask extends AsyncTask<Void, Void, Void> {
+    private class ImportAsynTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -197,15 +198,17 @@ public class BeyondarExamples extends Activity {
     }
 
     private void makeDirectory() {
-//        String str = Environment.getExternalStorageState();
-//        if (str.equals(Environment.MEDIA_MOUNTED)) {
+        String dirPath = ARPath;
+        File file = new File(dirPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+    }
 
-            String dirPath = ARPath;
-            File file = new File(dirPath);
-            if (!file.exists()) {
-//                Toast.makeText(mContext, "Make Directory", Toast.LENGTH_SHORT).show();
-                file.mkdirs();
-            }
-//        }
+    private void initActionBar() {
+        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+        }
     }
 }
